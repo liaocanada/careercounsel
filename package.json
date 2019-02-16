@@ -6,7 +6,11 @@
     "indeed-scraper": "^2.2.0",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
-    "react-scripts": "^2.1.5"
+    "react-scripts": "^2.1.5",
+    "react-semantic-ui": "^0.2.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.85.0",
+    "yarn": "^1.13.0"
   },
   "scripts": {
     "start": "react-scripts start",
