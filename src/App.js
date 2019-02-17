@@ -13,7 +13,7 @@ export default class App extends Component {
     this.state = {
       formData: {},
       stats: {
-        total: "",
+        total: 0,
         degrees: "",
         specializations: ""
       }
@@ -75,8 +75,9 @@ export default class App extends Component {
         <CareerSearch callback={this.updateSearchForm}/>
         <CareerResult 
           total={!!this.state.stats[0] ? this.state.stats[0].total : 0}
-          degrees={!!this.state.stats[0] ? this.state.stats[0].degrees : []}
+          degrees={!!this.state.stats[0] ? Object.values(this.state.stats[0].degrees) : []}
           specializations={!!this.state.stats[0] ? this.state.stats[0].specializations : []}
+          title = {this.state.formData.career}
          />
 
 				{/* Pass in processed data */}
