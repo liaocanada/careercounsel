@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Grid, Input, Form, Dropdown } from "semantic-ui-react";
+import { Input, Form, Dropdown } from "semantic-ui-react";
 import { LEVEL_OPTIONS } from "../resources/dropdowns/LevelOptions";
 import { TERM_OPTIONS } from "../resources/dropdowns/TermOptions";
 
 export default class CareerSearch extends Component {
   constructor(props) {
+
       super(props);
       this.state = ({
           careerInput: "",
@@ -17,7 +18,6 @@ export default class CareerSearch extends Component {
   }
 
   render() {
-      console.log(this.state);
     return (
       <Form>
         <Form.Field>
@@ -95,6 +95,9 @@ export default class CareerSearch extends Component {
   }
 
   handleClick(event) {
-      
+      console.log("Submit clicked!");
+      console.log(this.props);
+      const {careerInput, cityInput, provinceInput, experienceInput, positionInput} = this.state;
+      this.props.callback(careerInput, cityInput, provinceInput, experienceInput, positionInput);
   }
 }

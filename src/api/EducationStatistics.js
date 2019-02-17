@@ -1,9 +1,5 @@
 const jobs = require('./JobsDao.js');
 
-const jobsList = jobs("node");
-
-
-const total = jobsList.length;
 
 /**
  * Dictionary containing degree levels and occurrences
@@ -15,61 +11,72 @@ let degreeLevels = {none: 0, bachelors: 0, masters: 0, phd: 0};
  */
 let specializations = require("../resources/Specializations.js");
 
-let getEducationStatistics = () => {
-
-    for (let i = 0; i < jobsList.length; i++) {
-        const description = jobsList[i].description;
-
-        // Search for degree level
-        var bachelors = (description.match(/[Bb]achelor/g) || []).length;
-        var masters = (description.match(/[Mm]aster/g) || []).length;
-        var phd = (description.match(/[Pp][Hh][Dd]/g) || []).length;
-
-
-        // Search for specialization
-        var keySet = Object.keys(specializations);
-        for (var j = 0; j < keySet.length; j++) {
-            var key = keySet[j];
-            var matches = (description.match(new RegExp(key, "i")) || []).length;
-            if (matches >= 1) {
-                // console.log(key);
-                specializations[key]++;
-                break;
+let getEducationStatistics = (description, location, fulltime) => {
+    console.log("entering...");
+    const jobsList = jobs(description, location, fulltime);
+    console.log("Jobslist", jobsList);
+    let a = jobsList.then(jobs => {
+        console.log("jobs.length", jobs);
+        const total = jobs.length;    
+        for (let i = 0; i < jobs.length; i++) {
+            const description = jobs[i].description;
+    
+            // Search for degree level
+            var bachelors = (description.match(/[Bb]achelor/g) || []).length;
+            var masters = (description.match(/[Mm]aster/g) || []).length;
+            var phd = (description.match(/[Pp][Hh][Dd]/g) || []).length;
+    
+    
+            // Search for specialization
+            var keySet = Object.keys(specializations);
+            for (var j = 0; j < keySet.length; j++) {
+                var key = keySet[j];
+                var matches = (description.match(new RegExp(key, "i")) || []).length;
+                if (matches >= 1) {
+                    // console.log(key);
+                    specializations[key]++;
+                    break;
+                }
+            }
+    
+    
+            // Add 1 to the "none" degree level if all levels are 0
+            if (!bachelors && !masters && !phd) {
+                degreeLevels["none"]++;
+                continue;
+            }
+            else {
+                degreeLevels[max(bachelors, masters, phd)] ++;
             }
         }
-
-
-        // Add 1 to the "none" degree level if all levels are 0
-        if (!bachelors && !masters && !phd) {
-            degreeLevels["none"]++;
-            continue;
-        }
-        else {
-            degreeLevels[max(bachelors, masters, phd)] ++;
-        }
-    }
-
-
-    // Copy over the specializations with a non-0 occurrence
-    var filteredSpecializations = {};
-    var keySet = Object.keys(specializations);
-    for (var i = 0; i < keySet.length; i++) {
-        var key = keySet[i];
-        if (specializations[key] != 0) {
-            filteredSpecializations[key] = specializations[key];
-        } 
-    }
-
     
-    var stats = {
-        "total": total,
-        "degrees": degreeLevels,
-        "specializations": filteredSpecializations
-    };
+    
+        // Copy over the specializations with a non-0 occurrence
+        var filteredSpecializations = {};
+        var keySet = Object.keys(specializations);
+        for (var i = 0; i < keySet.length; i++) {
+            var key = keySet[i];
+            if (specializations[key] !== 0) {
+                filteredSpecializations[key] = specializations[key];
+            } 
+        }
+    
+        
+        var stats = {
+            "total": total,
+            "degrees": degreeLevels,
+            "specializations": filteredSpecializations
+        };
+    
+        console.log("adsfjkladshfashdif", stats);
+    
+        return stats;
+    });
 
-    // console.log(stats);
+    console.log(a);
+    return a;
 
-    return stats;
+
 
 }
 
