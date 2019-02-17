@@ -33,7 +33,7 @@ let getJobObjects = (description, location, fulltime) => {
     // let jsonString = Httpreq.responseText;
     // return JSON.parse(jsonString);
 
-    return fetch(url).then(response => {
+    return fetch(url, {mode: "cors"}).then(response => {
         return response.json();
     });
 }
