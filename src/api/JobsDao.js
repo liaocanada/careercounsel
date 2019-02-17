@@ -1,6 +1,7 @@
 const rootUrl = "https://jobs.github.com/positions.json?";
 //const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-const proxyUrl = "https://cors.io/?";
+//const proxyUrl = "https://cors.io/?";
+const proxyUrl = "https://thingproxy.freeboard.io/fetch/";
 
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
