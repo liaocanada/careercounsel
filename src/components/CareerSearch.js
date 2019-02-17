@@ -4,22 +4,56 @@ import { LEVEL_OPTIONS } from "../resources/dropdowns/LevelOptions";
 import { TERM_OPTIONS } from "../resources/dropdowns/TermOptions";
 
 export default class CareerSearch extends Component {
+  constructor(props) {
+      super(props);
+      this.state = ({
+          careerInput: "",
+          cityInput: "",
+          provinceInput: "",
+          experienceInput: "",
+          positionInput: ""
+      });
+
+  }
+
   render() {
+      console.log(this.state);
     return (
       <Form>
         <Form.Field>
-          <Input focus fluid placeholder="Search for a career..." />
+          <Input
+            focus
+            fluid
+            placeholder="Search for a career..."
+            value={this.state.careerInput}
+            onChange={(_, event) => {
+                this.setState({careerInput: event.value});
+                // console.log(event);
+            }}
+          />
         </Form.Field>
 
         <Form.Group>
 
             <Form.Field width={13}>
                 <label>City</label>
-                <input placeholder='City' />
+                <Input
+                    placeholder='City'
+                    value={this.state.cityInput}
+                    onChange={(_, event) => {
+                        this.setState({cityInput: event.value});
+                    }}
+                />
             </Form.Field>
             <Form.Field width={3}>
                 <label>Province</label>
-                <input placeholder='Province' />
+                <Input
+                    placeholder='Province'
+                    value={this.state.provinceInput}
+                    onChange={(_, event) => {
+                        this.setState({provinceInput: event.value});
+                    }}
+                    />
             </Form.Field>
         </Form.Group>
 
@@ -32,6 +66,10 @@ export default class CareerSearch extends Component {
                     search
                     selection
                     options={LEVEL_OPTIONS}
+                    value={this.state.experienceInput}
+                    onChange={(_, event) => {
+                        this.setState({experienceInput: event.value});
+                    }}
                 />
             </Form.Field>
 
@@ -43,12 +81,20 @@ export default class CareerSearch extends Component {
                     search
                     selection
                     options={TERM_OPTIONS}
+                    value={this.state.positionInput}
+                    onChange={(_, event) => {
+                        this.setState({positionInput: event.value});
+                    }}
                 />
             </Form.Field>
         </Form.Group>
 
-        <Form.Button>Submit!</Form.Button>
+        <Form.Button onClick={(_, event) => this.handleClick(event)}>Submit!</Form.Button>
       </Form>
     );
+  }
+
+  handleClick(event) {
+      
   }
 }
