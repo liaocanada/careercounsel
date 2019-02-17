@@ -30,7 +30,7 @@ export default class CareerResult extends Component {
               <Header>What level of degree do I need?</Header>
               <strong>At least:</strong>
               <p>
-                High school: {degrees[0]} ({degrees[0] * 100 / total}%) <br />
+                High school: {degrees[0]} ({degrees[0] * 100/ total}%) <br />
                 Bachelor's degree: {degrees[1]} ({degrees[1] * 100 / total}%) <br />
                 Master's degree: {degrees[2]} ({degrees[2] * 100 / total}%) <br />
                 Doctorate degree: {degrees[3]} ({degrees[3] * 100/ total}%)
@@ -38,7 +38,7 @@ export default class CareerResult extends Component {
 
               <Header>What are the most common degrees required?</Header>
               <p>
-                1. {Object.keys(specializations)[0]} ({(specializations[Object.keys(specializations)[0]] * 100 / total).toFixed(1)}%) <br />
+                1. {Object.keys(specializations)[0]} (({(specializations[Object.keys(specializations)[0]] * 100 / total).toFixed(1)}%) <br />
                 2. {Object.keys(specializations)[1]} ({(specializations[Object.keys(specializations)[1]] * 100 / total).toFixed(1)}%) <br />
                 3. {Object.keys(specializations)[2]} ({(specializations[Object.keys(specializations)[2]] * 100 / total).toFixed(1)}%)
               </p>
