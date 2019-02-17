@@ -30,7 +30,7 @@ export default class CareerResult extends Component {
               <Header>What level of degree do I need?</Header>
               <strong>At least:</strong>
               <p>
-                High school: {degrees[0]} ({degrees[0] * 100 / total}%) <br />
+                High school: {degrees[0]} ({degrees[0] * 100/ total}%) <br />
                 Bachelor's degree: {degrees[1]} ({degrees[1] * 100 / total}%) <br />
                 Master's degree: {degrees[2]} ({degrees[2] * 100 / total}%) <br />
                 Doctorate degree: {degrees[3]} ({degrees[3] * 100/ total}%)
