@@ -38,16 +38,16 @@ export default class CareerResult extends Component {
 
               <Header>What are the most common degrees required?</Header>
               <p>
-                1. {Object.keys(specializations)[0]} ({(specializations[Object.keys(specializations)[0]] * 100 / total).toFixed(1)}%) <br />
-                2. {Object.keys(specializations)[1]} ({(specializations[Object.keys(specializations)[1]] * 100 / total).toFixed(1)}%) <br />
-                3. {Object.keys(specializations)[2]} ({(specializations[Object.keys(specializations)[2]] * 100 / total).toFixed(1)}%)
+                1. {!!Object.keys(specializations)[0] ? ((Object.keys(specializations)[0]).substring(0, 1).toUpperCase() + (Object.keys(specializations)[0]).substring(1).toLowerCase()) : <></>} ({!!Object.keys(specializations)[0] ? ((specializations[Object.keys(specializations)[0]] * 100 / total).toFixed(1)) + "%" : "N/A"}) <br />
+                2. {!!Object.keys(specializations)[1] ? ((Object.keys(specializations)[1]).substring(0, 1).toUpperCase() + (Object.keys(specializations)[1]).substring(1).toLowerCase()) : <></>} ({!!Object.keys(specializations)[1] ? ((specializations[Object.keys(specializations)[1]] * 100 / total).toFixed(1)) + "%" : "N/A"}) <br />
+                3. {!!Object.keys(specializations)[2] ? ((Object.keys(specializations)[2]).substring(0, 1).toUpperCase() + (Object.keys(specializations)[2]).substring(1).toLowerCase()) : <></>} ({!!Object.keys(specializations)[2] ? ((specializations[Object.keys(specializations)[2]] * 100 / total).toFixed(1)) + "%" : "N/A"})
               </p>
             </>
           ) : (
             <>
               <Header icon>
                 <Icon name="cloud" />
-                Modules will be added here.
+                Stats will appear here when you search something!
               </Header>
             </>
           )}
