@@ -2,32 +2,46 @@ const jobs = require('./JobsDao.js');
 
 const jobsList = jobs("node");
 
-/** Array representing number of degrees requiring types of degrees
- * degreeLevels[0]: unspecified
- * degreeLevels[1]: Bachelor's
- * degreeLevels[2]: Master's
- * degreeLevels[3]: PhD
- * degreeLevels[4]: Total number of jobs searched
+
+const total = jobsList.length;
+
+/**
+ * Dictionary containing degree levels and occurrences
  */
-let degreeLevels = [0, 0, 0, 0, 0];
+let degreeLevels = {none: 0, bachelors: 0, masters: 0, phd: 0};
+
+/**
+ * Dictionary containing specializations and occurrences
+ */
+let specializations = require("../resources/Specializations.js");
 
 let getEducationStatistics = () => {
-
-    degreeLevels[4] = jobsList.length;
 
     for (let i = 0; i < jobsList.length; i++) {
         const description = jobsList[i].description;
 
+        // Search for degree level
         var bachelors = (description.match(/[Bb]achelor/g) || []).length;
         var masters = (description.match(/[Mm]aster/g) || []).length;
         var phd = (description.match(/[Pp][Hh][Dd]/g) || []).length;
 
-        console.log(bachelors);
-        console.log(masters);
-        console.log(phd);
 
+        // Search for specialization
+        var keySet = Object.keys(specializations);
+        for (var j = 0; j < keySet.length; j++) {
+            var key = keySet[j];
+            var matches = (description.match(new RegExp(key, "i")) || []).length;
+            if (matches >= 1) {
+                // console.log(key);
+                specializations[key]++;
+                break;
+            }
+        }
+
+
+        // Add 1 to the "none" degree level if all levels are 0
         if (!bachelors && !masters && !phd) {
-            degreeLevels[0]++;
+            degreeLevels["none"]++;
             continue;
         }
         else {
@@ -35,8 +49,27 @@ let getEducationStatistics = () => {
         }
     }
 
-    console.log(degreeLevels);
-    return degreeLevels;
+
+    // Copy over the specializations with a non-0 occurrence
+    var filteredSpecializations = {};
+    var keySet = Object.keys(specializations);
+    for (var i = 0; i < keySet.length; i++) {
+        var key = keySet[i];
+        if (specializations[key] != 0) {
+            filteredSpecializations[key] = specializations[key];
+        } 
+    }
+
+    
+    var stats = {
+        "total": total,
+        "degrees": degreeLevels,
+        "specializations": filteredSpecializations
+    };
+
+    // console.log(stats);
+
+    return stats;
 
 }
 
@@ -49,16 +82,16 @@ let getEducationStatistics = () => {
  */
 let max = (bachelors, masters, phd) => {
     if (bachelors > masters && bachelors > phd) {
-        return 1;
+        return "bachelors";
     }
     else if (masters > bachelors && masters > phd) {
-        return 2;
+        return "masters";
     }
     else if (phd > bachelors && phd > masters) {
-        return 3;
+        return "phd";
     }
     else {
-        return Math.floor(3 * Math.random) + 1;
+        return "bachelors";
     }
 }
 
