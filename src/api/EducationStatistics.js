@@ -1,6 +1,6 @@
 const jobs = require('./JobsDao.js');
 
-const jobsList = jobs("node");
+const jobsList = jobs("web"); //inputted by user
 
 
 const total = jobsList.length;
@@ -57,10 +57,10 @@ let getEducationStatistics = () => {
         var key = keySet[i];
         if (specializations[key] != 0) {
             filteredSpecializations[key] = specializations[key];
-        } 
+        }
     }
 
-    
+
     var stats = {
         "total": total,
         "degrees": degreeLevels,
@@ -75,9 +75,9 @@ let getEducationStatistics = () => {
 
 /**
  * TODO
- * @param {int} bachelors 
- * @param {int} masters 
- * @param {int} phd 
+ * @param {int} bachelors
+ * @param {int} masters
+ * @param {int} phd
  * @returns 1, 2, or 3, representing which has the max
  */
 let max = (bachelors, masters, phd) => {
