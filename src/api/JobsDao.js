@@ -1,13 +1,14 @@
 const rootUrl = "https://jobs.github.com/positions.json?";
-const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+//const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+const proxyUrl = "https://cors.io/?";
 
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 /**
- * 
- * @param {string} description 
- * @param {string} location 
- * @param {boolean} fulltime 
+ *
+ * @param {string} description
+ * @param {string} location
+ * @param {boolean} fulltime
  */
 let getJobObjects = (description, location, fulltime) => {
     var Httpreq = new XMLHttpRequest();
@@ -33,7 +34,7 @@ let getJobObjects = (description, location, fulltime) => {
     // let jsonString = Httpreq.responseText;
     // return JSON.parse(jsonString);
 
-    return fetch(url, {mode: "cors"}).then(response => {
+    return fetch(url).then(response => {
         return response.json();
     });
 }
