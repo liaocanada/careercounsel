@@ -13,7 +13,7 @@ export default class App extends Component {
 	  <div className="App">
 		<Header size="huge" icon textAlign='center'>
 			<Icon name='suitcase' circular />
-        	<Header.Content>CareerCoach</Header.Content>
+        	<Header.Content>CareerCounsel</Header.Content>
 		</Header>
 		<p align='center'>
 		  Are you looking a job? Unsure what skill are required?
