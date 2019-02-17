@@ -16,34 +16,38 @@ const queryOptions = {
   limit: '2'
 };
 
+let urlArray = new Array(queryOptions.limit);
 indeed.query(queryOptions).then(res => {
-    console.log(res); // An array of Job objects
+    //console.log(res); // An array of Job objects
 
-    for(let i = 0; i < queryOptions; ++i){
-        const url = res[i].url;
+    for(let i = 0; i < queryOptions.limit; ++i){
+        urlArray[i] = res[i].url;
         // fetch specific summary, return summary
         // save summary as a large string
         //
     }
 
+    console.log(urlArray);
 // consult freecodebootcamp website post for more detail
-    rp(url)
+
+    rp(urlArray[0])
       .then(function(html){
         //success!
         const indeedSummaries = [];
-        for (let i = 0; i < queryOptions; i++) {
-          indeedSummaries.push($('big > a', html)[i].attribs.title);
+        //for (let i = 0; i < queryOptions.limit; i++) {
+          console.log($('.jobsearch-JobComponent-description > div', html));
+          indeedSummaries.push($('.jobsearch-JobComponent-description > div > p', html));
             //parse here
-        }
+        //}
 
-        for (let i = 0; i < queryOptions; i++) {
+        /*for (let i = 0; i < queryOptions; i++) {
           console.log(+i+1 + ":" + indeedSummaries[i]);
         }
-        console.log(indeedSummaries);console.log(html);
+        console.log(indeedSummaries);console.log(html);*/
       })
       .catch(function(err){
         //handles error
-      });
+    });
 
 });
 
