@@ -47,7 +47,7 @@ export default class CareerResult extends Component {
             <>
               <Header icon>
                 <Icon name="cloud" />
-                Modules will be added here.
+                Modules will appear here.
               </Header>
             </>
           )}
