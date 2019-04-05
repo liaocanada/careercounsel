@@ -8,3 +8,7 @@ The application can currently return Degree requirements and the specification o
 
 ## Trying it out
 In order to run the application, download the repo into a folder; open cmd, run the script `npm install`, and then `npm start` to start the web app.
+
+## Interface
+
+![Screenshot](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/766/212/datas/gallery.jpg)

@@ -4,17 +4,14 @@ const rootUrl = "https://jobs.github.com/positions.json?";
 const proxyUrl = "https://thingproxy.freeboard.io/fetch/";
 // https://gist.github.com/jimmywarting/ac1be6ea0297c16c477e17f8fbe51347
 
-
 var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 /**
- *
  * @param {string} description
  * @param {string} location
  * @param {boolean} fulltime
  */
 let getJobObjects = (description, location, fulltime) => {
-    var Httpreq = new XMLHttpRequest();
 
     // No parameters
     if (!description && !location && !fulltime) {
