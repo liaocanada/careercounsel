@@ -1,9 +1,5 @@
 const jobs = require("./JobsDao.js");
 
-// const jobsList = jobs("web"); //inputted by user
-
-// const total = jobsList.length;
-
 /**
  * Dictionary containing degree levels and occurrences
  */
@@ -15,30 +11,33 @@ let degreeLevels = { none: 0, bachelors: 0, masters: 0, phd: 0 };
 let specializations = require("../resources/Specializations.js");
 
 let getEducationStatistics = (description, location, fulltime) => {
-  console.log("entering...");
   const jobsList = jobs(description, location, fulltime);
-  console.log("Jobslist", jobsList);
-  let a = jobsList.then(jobs => {
-    console.log("jobs.length", jobs);
-    const total = jobs.length;
-    for (let i = 0; i < jobs.length; i++) {
+  console.log("Jobs found: ", jobsList);
+
+  let jobStats = jobsList.then(jobs => {
+    console.log("Number of jobs found: ", jobs.length);
+
+	for (let i = 0; i < jobs.length; i++) {
       const description = jobs[i].description;
 
       // Search for degree level
-      var bachelors = (description.match(/[Bb]achelor/g) || []).length;
-      var masters = (description.match(/[Mm]aster/g) || []).length;
-      var phd = (description.match(/[Pp][Hh][Dd]/g) || []).length;
+      var bachelors = (description.match(/[Bb]achelor['’]s|[Pp]ost[- ][Ss]econdary/g) || []).length;
+      var masters = (description.match(/[Mm]aster['’]s/g) || []).length;
+      var phd = (description.match(/[Pp][Hh][Dd]|[Dd]octoral|[Dd]octorate|[Dd]octor['’]s/g) || []).length;
 
       // Search for specialization
-      var keySet = Object.keys(specializations);
+      var keySet = Object.keys(specializations);  // A list of degree specializations
       for (var j = 0; j < keySet.length; j++) {
         var key = keySet[j];
         var matches = (description.match(new RegExp(key, "i")) || []).length;
-        if (matches >= 1) {
-          // console.log(key);
-          specializations[key]++;
-          break;
-        }
+		// OLD - Breaks on first find of a specialization
+		// if (matches >= 1) {
+        //   specializations[key]++;
+        //   break;
+		// }
+		
+		// New - add in every match
+		specializations[key] += matches;
       }
 
       // Add 1 to the "none" degree level if all levels are 0
@@ -61,18 +60,16 @@ let getEducationStatistics = (description, location, fulltime) => {
     }
 
     var stats = {
-      total: total,
+      total: jobs.length,
       degrees: degreeLevels,
       specializations: filteredSpecializations
     };
 
-    console.log("adsfjkladshfashdif", stats);
-
     return stats;
   });
 
-  console.log(a);
-  return a;
+  console.log(jobStats);
+  return jobStats;
 };
 
 /**

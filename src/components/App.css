@@ -1,0 +1,13 @@
+.App {
+  margin: 30px 10%;
+}
+
+div.ui.header::before {
+  content: none;
+}
+
+.ui.placeholder .header:not(:first-child):before,
+.ui.placeholder .image:not(:first-child):before,
+.ui.placeholder .paragraph:not(:first-child):before {
+    content: none
+};
