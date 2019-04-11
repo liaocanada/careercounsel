@@ -1,79 +1,68 @@
-const jobs = require("./JobsDao.js");
-const indeedJobs = require("./JobsDaoIndeed.js");
+const getGithubDescriptions = require("./GithubDao.js");
+const getIndeedDescriptions = require("./IndeedDao.js");
 
-/**
- * Dictionary containing degree levels and occurrences
- */
+let bachelorsRegex = /[Bb]achelor['’]s|[Pp]ost[- ][Ss]econdary/g;
+let mastersRegex = /[Mm]aster['’]s/g;
+let phdRegex = /[Pp][Hh][Dd]|[Dd]octoral|[Dd]octorate|[Dd]octor['’]s/g;
+
+let specializations = require("../resources/Specializations.js");
 let degreeLevels = { none: 0, bachelors: 0, masters: 0, phd: 0 };
 
-/**
- * Dictionary containing specializations and occurrences
- */
-let specializations = require("../resources/Specializations.js");
+let getEducationStatistics = async (description, city, province, level, jobType) => {
 
-let getEducationStatistics = (description, city, province, level, jobType) => {
-  const jobsList = jobs(description, city, jobType === "fulltime");
-  const indeedJobsList = indeedJobs(description, city, province, level, jobType);
-  console.log("Github Jobs found: ", jobsList);
-  console.log("Indeed Jobs found: ", indeedJobsList);
+	const githubJobsList = getGithubDescriptions(description, city, jobType === "fulltime");
+	const indeedJobsList = getIndeedDescriptions(description, city, province, level, jobType);
 
-  let jobStats = jobsList.then(jobs => {
-    console.log("Number of jobs found: ", jobs.length);
+	let allDescriptions = Promise.all([githubJobsList, indeedJobsList]);
 
-    for (let i = 0; i < jobs.length; i++) {
-      const description = jobs[i].description;
+	let jobStats = allDescriptions.then(resolved => {
+		// Flatten
+		let descriptions = resolved[0].concat(resolved[1]);
+		console.log('Found', resolved[0].length, 'from GitHub and', resolved[1].length, 'from Indeed!');
+		console.log('Total:', descriptions.length);
 
-      // Search for degree level
-      var bachelors = (
-        description.match(/[Bb]achelor['’]s|[Pp]ost[- ][Ss]econdary/g) || []
-      ).length;
-      var masters = (description.match(/[Mm]aster['’]s/g) || []).length;
-      var phd = (
-        description.match(
-          /[Pp][Hh][Dd]|[Dd]octoral|[Dd]octorate|[Dd]octor['’]s/g
-        ) || []
-      ).length;
+		// descriptions.forEach(description => console.log("Description: ", description.substring(0, 20)))
 
-      // Search for specialization
-      var keySet = Object.keys(specializations); // A list of degree specializations
-      for (var j = 0; j < keySet.length; j++) {
-        var key = keySet[j];
-        var matches = (description.match(new RegExp(key, "i")) || []).length;
+		// For each job description
+		descriptions.forEach(description => {
 
-        // New - add in every match
-        specializations[key] += matches;
-      }
+			// Count number of degrees
+			var bachelors = (description.match(bachelorsRegex) || []).length;
+			var masters = (description.match(mastersRegex) || []).length;
+			var phd = (description.match(phdRegex) || []).length;
 
-      // Add 1 to the "none" degree level if all levels are 0
-      if (!bachelors && !masters && !phd) {
-        degreeLevels["none"]++;
-        continue;
-      } else {
-        degreeLevels[max(bachelors, masters, phd)]++;
-      }
-    }
+			let maxOccurrences = max(bachelors, masters, phd);
+			if (maxOccurrences === 0) degreeLevels["none"]++;
+			else degreeLevels[maxOccurrences]++;
 
-    // Copy over the specializations with a non-0 occurrence
-    var filteredSpecializations = {};
-    var keySet = Object.keys(specializations);
-    for (var i = 0; i < keySet.length; i++) {
-      var key = keySet[i];
-      if (specializations[key] !== 0) {
-        filteredSpecializations[key] = specializations[key];
-      }
-    }
+			// Count number of specializations
+			Object.keys(specializations).forEach(key => {
+				var matches = (description.match(new RegExp(key, "i")) || []).length;
+				specializations[key] += matches;
+			});
 
-    var stats = {
-      total: jobs.length,
-      degrees: degreeLevels,
-      specializations: filteredSpecializations
-    };
+		});
 
-    return stats;
-  });
+		// Copy over the specializations with a non-0 occurrence
+		var filteredSpecializations = {};
+		Object.keys(specializations).forEach(key => {
+			if (specializations[key] !== 0)
+				filteredSpecializations[key] = specializations[key];
+		})
 
-  console.log(jobStats);
-  return jobStats;
+		let stats = {
+			total: description.length,
+			degrees: degreeLevels,
+			specializations: filteredSpecializations
+		};
+
+		// console.log(stats);
+		return stats;
+	})
+	.catch(err => console.error(err));
+
+	console.log(jobStats);
+	return jobStats;
 };
 
 /**
@@ -84,15 +73,15 @@ let getEducationStatistics = (description, city, province, level, jobType) => {
  * @returns 1, 2, or 3, representing which has the max
  */
 let max = (bachelors, masters, phd) => {
-  if (bachelors > masters && bachelors > phd) {
-    return "bachelors";
-  } else if (masters > bachelors && masters > phd) {
-    return "masters";
-  } else if (phd > bachelors && phd > masters) {
-    return "phd";
-  } else {
-    return "bachelors";
-  }
+	if (bachelors > masters && bachelors > phd) {
+		return "bachelors";
+	} else if (masters > bachelors && masters > phd) {
+		return "masters";
+	} else if (phd > bachelors && phd > masters) {
+		return "phd";
+	} else {
+		return "bachelors";
+	}
 };
 
 module.exports = getEducationStatistics;

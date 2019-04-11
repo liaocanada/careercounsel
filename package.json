@@ -5,7 +5,8 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "cors": "^2.8.5",
-    "indeed-scraper": "^3.0.0",
+    "indeed-scraper": "^3.0.1",
+    "node-fetch": "^2.3.0",
     "puppeteer": "^1.14.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
