@@ -1,4 +1,5 @@
 const jobs = require("./JobsDao.js");
+const indeedJobs = require("./JobsDaoIndeed.js");
 
 /**
  * Dictionary containing degree levels and occurrences
@@ -10,34 +11,37 @@ let degreeLevels = { none: 0, bachelors: 0, masters: 0, phd: 0 };
  */
 let specializations = require("../resources/Specializations.js");
 
-let getEducationStatistics = (description, location, fulltime) => {
-  const jobsList = jobs(description, location, fulltime);
-  console.log("Jobs found: ", jobsList);
+let getEducationStatistics = (description, city, province, level, jobType) => {
+  const jobsList = jobs(description, city, jobType === "fulltime");
+  const indeedJobsList = indeedJobs(description, city, province, level, jobType);
+  console.log("Github Jobs found: ", jobsList);
+  console.log("Indeed Jobs found: ", indeedJobsList);
 
   let jobStats = jobsList.then(jobs => {
     console.log("Number of jobs found: ", jobs.length);
 
-	for (let i = 0; i < jobs.length; i++) {
+    for (let i = 0; i < jobs.length; i++) {
       const description = jobs[i].description;
 
       // Search for degree level
-      var bachelors = (description.match(/[Bb]achelor['’]s|[Pp]ost[- ][Ss]econdary/g) || []).length;
+      var bachelors = (
+        description.match(/[Bb]achelor['’]s|[Pp]ost[- ][Ss]econdary/g) || []
+      ).length;
       var masters = (description.match(/[Mm]aster['’]s/g) || []).length;
-      var phd = (description.match(/[Pp][Hh][Dd]|[Dd]octoral|[Dd]octorate|[Dd]octor['’]s/g) || []).length;
+      var phd = (
+        description.match(
+          /[Pp][Hh][Dd]|[Dd]octoral|[Dd]octorate|[Dd]octor['’]s/g
+        ) || []
+      ).length;
 
       // Search for specialization
-      var keySet = Object.keys(specializations);  // A list of degree specializations
+      var keySet = Object.keys(specializations); // A list of degree specializations
       for (var j = 0; j < keySet.length; j++) {
         var key = keySet[j];
         var matches = (description.match(new RegExp(key, "i")) || []).length;
-		// OLD - Breaks on first find of a specialization
-		// if (matches >= 1) {
-        //   specializations[key]++;
-        //   break;
-		// }
-		
-		// New - add in every match
-		specializations[key] += matches;
+
+        // New - add in every match
+        specializations[key] += matches;
       }
 
       // Add 1 to the "none" degree level if all levels are 0

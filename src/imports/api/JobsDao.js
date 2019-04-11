@@ -13,6 +13,8 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
  */
 let getJobObjects = (description, location, fulltime) => {
 
+    return [];
+
     // No parameters
     if (!description && !location && !fulltime) {
         return null;
@@ -24,13 +26,16 @@ let getJobObjects = (description, location, fulltime) => {
     url = url.concat(!!location ? "location=" + location + "&": "");
     url = url.concat(fulltime ? "fulltime=" + fulltime + "&": "");
     url = url.replace(" ", "%20");
-    console.log("Root url: ", url);
+    if (url.charAt(url.length - 1) === "&") {
+        url = url.substring(0, url.length - 1);
+    }
+    console.log("Root GitHub url: ", url);
     
     // Attach proxy url in front
     url = proxyUrl + url
-    console.log("URL searching: ", url);
 
     return fetch(url).then(response => {
+        console.log(response)
         return response.json();
     });
 }

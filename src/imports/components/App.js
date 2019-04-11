@@ -20,6 +20,30 @@ export default class App extends Component {
     };
   }
 
+  componentDidMount() {
+    // Call our fetch function below once the component mounts
+    console.log("Mounted")
+    this.callBackendAPI()
+      .then(res => this.setState({ data: res.express }))
+      .catch(err => console.log(err));
+  }
+  // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
+  callBackendAPI = async () => {
+    const response = fetch('/indeed_jobs');
+    // const body = response.json();
+    response.then((resolved) => {
+      console.log("Resolved: ", resolved);
+    })
+
+    // if (response.status !== 200) {
+    //   throw Error(body.message)
+    // }
+    console.log("Response is ", response)
+    // console.log("Body is ", body)
+    // return body;
+  };
+
+
   updateSearchForm = async (career, city, province, experience, position) => {
     this.setState({
       formData: {
@@ -34,7 +58,7 @@ export default class App extends Component {
     if (!!career && !!city && !!position) {
       // TODO add loading icon
       this.setState({
-        stats: [await getEducationStats(career, city, !!position)]
+        stats: [await getEducationStats(career, city, province, experience, position)]
       });
       console.log("Done loading");
     } else {
@@ -59,6 +83,7 @@ export default class App extends Component {
           <Icon name="suitcase" circular />
           <Header.Content>CareerCounsel</Header.Content>
         </Header>
+        {/* <p>{this.state.data}</p> */}
         <p align="center">
           Are you looking a job? Unsure what skill are required? Contemplating a
           new degree? We've got all the info you need.
