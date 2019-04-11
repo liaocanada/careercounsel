@@ -3,18 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "cheerio": "^1.0.0-rc.2",
-    "indeed-scraper": "^2.2.0",
-    "puppeteer": "^1.12.2",
-    "react": "^16.8.2",
-    "react-dom": "^16.8.2",
-    "react-scripts": "^2.1.5",
+    "cheerio": "^1.0.0-rc.3",
+    "cors": "^2.8.5",
+    "indeed-scraper": "^3.0.0",
+    "puppeteer": "^1.14.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^2.1.8",
     "react-semantic-ui": "^0.2.0",
     "request-promise": "^4.2.4",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.85.0",
     "xmlhttprequest": "^1.8.0",
-    "yarn": "^1.13.0"
+    "yarn": "^1.15.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -23,6 +24,7 @@
     "eject": "react-scripts eject",
     "testScript": "node ./src/api/DataScraper.js"
   },
+  "proxy": "http://127.0.0.1:5000/",
   "eslintConfig": {
     "extends": "react-app"
   },
