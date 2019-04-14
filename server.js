@@ -21,5 +21,7 @@ app.get('/stats', (req, res) => {
     let position = req.query.position;
 
     getEducationStats(career, city, province, experience, position)
-        .then(stats => res.send({ stats: stats }));
+        .then(stats => {
+            res.send(stats);
+        });
 });

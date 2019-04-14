@@ -5,8 +5,6 @@ import CareerResult from "./CareerResult";
 
 import "./App.css";
 
-let getEducationStats = require("../api/EducationStatistics.js");
-
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -16,33 +14,10 @@ export default class App extends Component {
         total: 0,
         degrees: "",
         specializations: ""
-      }
+      },
+      loading: false
     };
   }
-
-  componentDidMount() {
-    // Call our fetch function below once the component mounts
-    console.log("Mounted")
-    this.callBackendAPI()
-      .then(res => this.setState({ data: res.express }))
-      .catch(err => console.log(err));
-  }
-  // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
-  callBackendAPI = async () => {
-    const response = fetch('/indeed_jobs');
-    // const body = response.json();
-    response.then((resolved) => {
-      console.log("Resolved: ", resolved);
-    })
-
-    // if (response.status !== 200) {
-    //   throw Error(body.message)
-    // }
-    console.log("Response is ", response)
-    // console.log("Body is ", body)
-    // return body;
-  };
-
 
   updateSearchForm = async (career, city, province, experience, position) => {
     this.setState({
@@ -57,23 +32,43 @@ export default class App extends Component {
 
     if (!!career && !!city && !!position) {
       // TODO add loading icon
+      // this.setState({loading: true});
+      let url = this.getUrl(career, city, province, experience, position);
+      let response = await fetch(url);
+      let stats = await response.json();
+  
+      if (response.status !== 200) {
+        throw Error(stats.message)
+      }
+
       this.setState({
-        stats: [await getEducationStats(career, city, province, experience, position)]
+        stats: stats, 
       });
+      // this.setState({loading: false});
       console.log("Done loading");
     } else {
       this.setState({
-        stats: [
-          {
+        stats: {
             total: "",
             degrees: "",
             specializations: ""
-          }
-        ]
+        }
       });
       console.log("Nothing was loaded since one of the fields were blank");
     }
   };
+
+  getUrl = (career, city, province, experience, position) => {
+    // let DEFAULT_TEST_URL = '/stats?career=Software&city=San%20Francisco&province=CA&experience=junior&position=fulltime';
+    let url = '/stats?'
+    url += 'career=' + career
+    url += '&city=' + city
+    url += '&province=' + province
+    url += '&experience=' + experience
+    url += '&position=' + position
+    console.log('Accessing url', url);
+    return url;
+  }
 
   render() {
     console.log("App started!", this.state.stats);
@@ -90,14 +85,14 @@ export default class App extends Component {
         </p>
         <CareerSearch callback={this.updateSearchForm} />
         <CareerResult
-          total={!!this.state.stats[0] ? this.state.stats[0].total : 0}
+          total={console.log('state', this.state.stats) || (!!this.state.stats ? this.state.stats.total : 0)}
           degrees={
-            !!this.state.stats[0]
-              ? Object.values(this.state.stats[0].degrees)
+            !!this.state.stats
+              ? Object.values(this.state.stats.degrees)
               : []
           }
           specializations={
-            !!this.state.stats[0] ? this.state.stats[0].specializations : []
+            !!this.state.stats ? this.state.stats.specializations : []
           }
           title={this.state.formData.career}
         />

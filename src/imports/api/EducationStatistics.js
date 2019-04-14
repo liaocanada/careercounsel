@@ -1,5 +1,5 @@
-const getGithubDescriptions = require("./GithubDao.js");
-const getIndeedDescriptions = require("./IndeedDao.js");
+let getGithubDescriptions = require("./GithubDao.js");
+let getIndeedDescriptions = require("./IndeedDao.js");
 
 let bachelorsRegex = /[Bb]achelor['’]s|[Pp]ost[- ][Ss]econdary/g;
 let mastersRegex = /[Mm]aster['’]s/g;
@@ -10,9 +10,11 @@ let degreeLevels = { none: 0, bachelors: 0, masters: 0, phd: 0 };
 
 let getEducationStatistics = async (description, city, province, level, jobType) => {
 
-	const githubJobsList = getGithubDescriptions(description, city, jobType === "fulltime");
-	const indeedJobsList = getIndeedDescriptions(description, city, province, level, jobType);
+	// Get descriptions
+	let githubJobsList = getGithubDescriptions(description, city, jobType === "fulltime");
+	let indeedJobsList = getIndeedDescriptions(description, city, province, level, jobType);
 
+	// Merge
 	let allDescriptions = Promise.all([githubJobsList, indeedJobsList]);
 
 	let jobStats = allDescriptions.then(resolved => {
@@ -21,7 +23,7 @@ let getEducationStatistics = async (description, city, province, level, jobType)
 		console.log('Found', resolved[0].length, 'from GitHub and', resolved[1].length, 'from Indeed!');
 		console.log('Total:', descriptions.length);
 
-		// descriptions.forEach(description => console.log("Description: ", description.substring(0, 20)))
+		descriptions.forEach((description, i) => console.log(i, "Description: ", description.substring(0, 20)))
 
 		// For each job description
 		descriptions.forEach(description => {
@@ -51,17 +53,24 @@ let getEducationStatistics = async (description, city, province, level, jobType)
 		})
 
 		let stats = {
-			total: description.length,
+			total: descriptions.length,  // TODO FIX TOTAL COUNT
 			degrees: degreeLevels,
 			specializations: filteredSpecializations
 		};
 
-		// console.log(stats);
+		console.log('Stats from EducationStatistics.js', stats);
 		return stats;
 	})
 	.catch(err => console.error(err));
 
-	console.log(jobStats);
+	// Reset counters
+	// specializations.forEach(key => {
+	// 	specializations[key] = 0;
+	// });
+	// degreeLevels.forEach(key => {
+	// 	degreeLevels[key] = 0;
+	// });
+
 	return jobStats;
 };
 

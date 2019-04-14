@@ -12,18 +12,21 @@ let getIndeedDescriptions = (description, city, province, level, jobType) => {
     const queryOptions = {
         host: 'www.indeed.com',
         query: description,
-        city: city + (!!province ? (', ' + province) : ('')),
+        city: city + (!!province ? (', ' + province) : ''),
         radius: '25',
         level: level,
         jobType: jobType,
         maxAge: '',
         sort: 'relevance',
-        limit: '5'
+        limit: '500'
     };
 
     let indeedJobDescriptions = indeed.query(queryOptions)
         .then(res => {
             let jobUrls = res.map(job => job.url);
+            jobUrls.forEach((url, i) => {
+                console.log(i, url);
+            })
 
             let descriptions = jobUrls.map(url => {  // Returns array of promises of descriptions
                 return getJobDescription(url);  // A request-promise
