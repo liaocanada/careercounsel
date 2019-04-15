@@ -62,17 +62,28 @@ let getEducationStatistics = async (description, city, province, level, jobType)
 			});
 		});
 
-		// Copy over the specializations with a non-0 occurrence
-		var filteredSpecializations = {};
+		// Copy over the specializations with a non-0 occurrence, into a sorted array
+		var specializationsArray = [];
 		Object.keys(specializations).forEach(key => {
-			if (specializations[key] !== 0)
-				filteredSpecializations[key] = specializations[key];
+			if (specializations[key] !== 0) {
+				let capitalizedKey = key.substring(0, 1).toUpperCase() + key.substring(1).toLowerCase();
+				specializationsArray.push([
+					capitalizedKey, 								// [0] is the specialization, capitalized
+					specializations[key], 							// [1] is the number of occurrences found
+					specializations[key] / descriptions.length*100  // [2] is the percentage of all the descriptions
+				]);
+			}
 		})
+
+		// Sort descending
+		specializationsArray.sort((a, b) => {
+			return b[1] - a[1];
+		});
 
 		let stats = {
 			total: descriptions.length,
 			degrees: degreeLevels,
-			specializations: filteredSpecializations
+			specializations: specializationsArray
 		};
 
 		console.log('Stats from EducationStatistics.js', stats);

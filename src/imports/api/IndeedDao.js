@@ -9,7 +9,7 @@ let getIndeedDescriptions = (description, city, province, level, jobType) => {
     }
 
     // Insert parameters into an object
-    const queryOptions = {
+    let queryOptions = {
         host: 'www.indeed.com',
         query: description,
         city: city + (!!province ? (', ' + province) : ''),
@@ -20,6 +20,8 @@ let getIndeedDescriptions = (description, city, province, level, jobType) => {
         sort: 'relevance',
         limit: '500'
     };
+
+    console.log('Options: ', queryOptions);
 
     let indeedJobDescriptions = indeed.query(queryOptions)
         .then(res => {
