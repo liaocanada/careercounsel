@@ -24,9 +24,6 @@ let getIndeedDescriptions = (description, city, province, level, jobType) => {
     let indeedJobDescriptions = indeed.query(queryOptions)
         .then(res => {
             let jobUrls = res.map(job => job.url);
-            jobUrls.forEach((url, i) => {
-                console.log(i, url);
-            })
 
             let descriptions = jobUrls.map(url => {  // Returns array of promises of descriptions
                 return getJobDescription(url);  // A request-promise
