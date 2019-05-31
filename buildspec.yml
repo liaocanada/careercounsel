@@ -1,0 +1,31 @@
+# Adapted from https://github.com/backspace-academy/aws-nodejs-sample-codebuild/blob/master/buildspec.yml
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Installing yarn...
+      - npm install -g yarn
+  pre_build:
+    commands:
+      - echo Installing source npm dependencies
+      - npm install
+  build:
+    commands:
+      - echo Building React code, started on `date`
+      - yarn build
+  post_build:
+    commands:
+      - echo Build completed on `date`
+# Include only the files required for your application to run.
+# Do not use recursively include artifacts from node_modules directory as it will include unnecessary packages 
+# used only for building and testing.
+# ExpressJS apps will need other artifact directories included (bin/*, public/*, routes/*, views/* etc).
+#artifacts:
+#  files:
+#    - public/**/*
+#    - src/**/*
+#    - package.json
+#    - node_modules/**/*
+    
+# Not sure which node modules to include
