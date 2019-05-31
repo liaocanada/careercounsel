@@ -1,6 +1,8 @@
+# Documentation https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
 # Adapted from https://github.com/backspace-academy/aws-nodejs-sample-codebuild/blob/master/buildspec.yml
 version: 0.2
 
+# Basically runs the commands from top to bottom during CodeBuild
 phases:
   install:
     runtime-versions:
@@ -10,24 +12,24 @@ phases:
       - npm install -g yarn
   pre_build:
     commands:
-      - echo Installing source npm dependencies
+      - echo Installing npm dependencies
       - npm install
   build:
     commands:
-      - echo Building React code, started on `date`
+      - echo Building the web app, started on `date`
       - yarn build
   post_build:
     commands:
       - echo Build completed on `date`
-# Include only the files required for your application to run.
-# Do not use recursively include artifacts from node_modules directory as it will include unnecessary packages 
-# used only for building and testing.
-# ExpressJS apps will need other artifact directories included (bin/*, public/*, routes/*, views/* etc).
-#artifacts:
-#  files:
-#    - public/**/*
-#    - src/**/*
-#    - package.json
-#    - node_modules/**/*
-    
-# Not sure which node modules to include
+
+# Here I specify what the CodeBuild output artifact should contain.
+# Artifacts should only contain the files needed for the app to run. In this case, these files are 
+#   simply everything produced by the 'yarn build' command, i.e. everything under the 'build' directory.
+# Do not replace with 
+#     files: - 'build/**/*' 
+#   as this will include the build folder as well when deploying to S3, which won't work because index.html
+#   won't be at the root of the bucket.
+artifacts:
+  files:
+    - '**/*'
+  base-directory: build
