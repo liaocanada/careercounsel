@@ -60,7 +60,7 @@ export default class App extends Component {
 
   getUrl = (career, city, province, experience, position) => {
     // let DEFAULT_TEST_URL = '/stats?career=Software&city=San%20Francisco&province=CA&experience=junior&position=fulltime';
-    let url = '/stats?'
+    let url = 'https://api.davidliao.ca/getJobStats?'
     url += 'career=' + career
     url += '&city=' + city
     url += '&province=' + province

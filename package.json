@@ -21,11 +21,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "deploy": "aws s3 sync build/ s3://app.davidliao.ca --delete",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "testScript": "node ./src/api/DataScraper.js"
   },
-  "proxy": "http://127.0.0.1:5000/",
   "eslintConfig": {
     "extends": "react-app"
   },
