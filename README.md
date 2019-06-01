@@ -1,14 +1,36 @@
 ## CareerCounsel
 
-This application was written using React and Node.js. The prime purpose of this project is to summarize data from job boards and return them in an easy to read format. The UI runs on React, and the backend server and scripts runs on Express. 
+This application was written using React and Node.js. The prime purpose of this project is to summarize hundreds of real-time job postings from job boards and return them in an easy to understand, summarized statistical format. This repository only contains code for the front end.
 
-### Current Features
+### Behind the Scenes
 
-The application can currently return Degree requirements and the specification of the degree from external job boards, such as Indeed and Github Jobs. 
+* Development
+  * React
+  * HTML/CSS
+  * [React-Semantic UI](https://react.semantic-ui.com/)
+* Deployment and Hosting
+  * AWS S3 static website hosting
+  * Amazon CloudFront CDN for use of **secure, low-latency** edge locations
+  * Amazon Certificate Manager for SSL/TLS certificate to allow for **HTTPS** connections
+  * Google Domains DNS service
+* Continuous Deployment
+  * AWS CodePipeline **automatically starts a build and deployment process** whenever we commit a change on GitHub
+  * AWS CodeBuild for automatic code building on EC2 instances
+  * AWS CodeDeploy for automatic deployment
 
-## Trying it out
-In order to run the application, download the repo into a folder; open cmd, run the script `npm install`, `npm start` to start the web app, and then `node server.js` to start the back-end server. To access the web app, the site can be found at `http://localhost:3000` and the backend server can be found at `http://localhost:5000`
+### Features
 
-## Interface
+The application can currently return
+1. The level of education needed, and
+2. The type of degree needed
 
-![Screenshot](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/766/212/datas/gallery.jpg)
+from external job boards, such as Indeed and Github Jobs. 
+
+We plan on adding better and more informative statistics like what specific soft/hard skills are needed, and possibly maps showing which areas have higher/lower average salaries for a given search.
+
+### Trying it out
+
+This app is deployed onto <https://app.davidliao.ca>.
+
+<!-- ### Interface
+![Screenshot](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/766/212/datas/gallery.jpg) -->
