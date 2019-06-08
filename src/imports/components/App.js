@@ -5,7 +5,11 @@ import CareerResult from "./CareerResult";
 
 import "./App.css";
 
+const BASE_URL_DEV = 'http://127.0.0.1:5000/stats?';  // If the Express server is running
+const BASE_URL_PROD = 'https://api.davidliao.ca/getJobStats?';
+
 export default class App extends Component {
+
   constructor(props) {
     super(props);
     this.state = {
@@ -58,9 +62,13 @@ export default class App extends Component {
     }
   };
 
+  // Example URL: 
+  // 'https://api.davidliao.ca/getJobStats?/stats?career=Software&city=San%20Francisco&province=CA&
+  //    experience=junior&position=fulltime';
   getUrl = (career, city, province, experience, position) => {
-    // let DEFAULT_TEST_URL = '/stats?career=Software&city=San%20Francisco&province=CA&experience=junior&position=fulltime';
-    let url = 'https://api.davidliao.ca/getJobStats?'
+    let url = (process.env.NODE_ENV === 'development') ?
+      BASE_URL_DEV : BASE_URL_PROD;
+
     url += 'career=' + career
     url += '&city=' + city
     url += '&province=' + province
@@ -71,7 +79,7 @@ export default class App extends Component {
   }
 
   render() {
-    console.log("App started!", this.state.stats);
+    console.log("App started in", process.env.NODE_ENV, "environment");
     return (
       <div className="App">
         <Header size="huge" icon textAlign="center">
