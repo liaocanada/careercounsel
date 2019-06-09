@@ -48,7 +48,8 @@ export default class CareerSearch extends Component {
                     <Form.Field width={3}>
                         <label>Province</label>
                         <Input
-                            placeholder='Province/State'
+                            // placeholder='Province/State'
+                            placeholder='DO NOT ENTER -- WIP'
                             value={this.state.provinceInput}
                             onChange={(_, event) => {
                                 this.setState({ provinceInput: event.value });

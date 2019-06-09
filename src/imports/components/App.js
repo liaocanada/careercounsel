@@ -10,6 +10,7 @@ const BASE_URL_PROD = 'https://api.davidliao.ca/getJobStats?';
 
 export default class App extends Component {
 
+  /** Defines default state */
   constructor(props) {
     super(props);
     this.state = {
@@ -19,11 +20,61 @@ export default class App extends Component {
         degrees: "",
         specializations: ""
       },
-      loading: false
+      status: 'no-input',  // no-input, loading, done, error
+      errorMessage: ''  // explanation for error
     };
   }
 
+  /** Generates results based on this.state.formData */
+  generateResults = async () => {
+    
+    this.setState({status: 'loading'});
+    console.log('Loading begin')
+    const { career, city, province, experience, position } = this.state.formData;
+
+    if (!!career && !!city && !!position) {
+      let url = this.getUrl(career, city, province, experience, position);
+      console.log('Fetching from url', url);
+      
+      let response = await fetch(url).catch(() => {
+        console.error('error');
+        this.setState({
+          status: 'error',
+          errorMessage: 'Fetch failed',
+          stats: {
+            total: 0,
+            degrees: "",
+            specializations: ""
+          }
+        });
+      });
+      if (!response) return;
+      
+      let stats = await response.json();
+
+      this.setState({
+        stats: stats, 
+        status: 'done'
+      });
+
+      console.log('Done!')
+
+    } else {
+      this.setState({
+        stats: {
+            total: 0,
+            degrees: "",
+            specializations: ""
+        },
+        status: 'error', 
+        errorMessage: 'Mandatory fields incomplete'
+      });
+    }
+
+  }
+
   updateSearchForm = async (career, city, province, experience, position) => {
+    console.log(career, city, province, experience, position);
     this.setState({
       formData: {
         career,
@@ -32,34 +83,7 @@ export default class App extends Component {
         experience,
         position
       }
-    });
-
-    if (!!career && !!city && !!position) {
-      // TODO add loading icon
-      // this.setState({loading: true});
-      let url = this.getUrl(career, city, province, experience, position);
-      let response = await fetch(url);
-      let stats = await response.json();
-  
-      if (response.status !== 200) {
-        throw Error(stats.message)
-      }
-
-      this.setState({
-        stats: stats, 
-      });
-      // this.setState({loading: false});
-      console.log("Done loading");
-    } else {
-      this.setState({
-        stats: {
-            total: "",
-            degrees: "",
-            specializations: ""
-        }
-      });
-      console.log("Nothing was loaded since one of the fields were blank");
-    }
+    }, this.generateResults);
   };
 
   // Example URL: 
@@ -74,7 +98,6 @@ export default class App extends Component {
     url += '&province=' + province
     url += '&experience=' + experience
     url += '&position=' + position
-    console.log('Accessing url', url);
     return url;
   }
 
@@ -103,6 +126,8 @@ export default class App extends Component {
             !!this.state.stats ? this.state.stats.specializations : []
           }
           title={this.state.formData.career}
+          status={this.state.status}
+          errorMessage={this.state.errorMessage}
         />
 
         {/* Pass in processed data */}
