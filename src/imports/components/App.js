@@ -30,10 +30,10 @@ export default class App extends Component {
     
     this.setState({status: 'loading'});
     console.log('Loading begin')
-    const { career, city, province, experience, position } = this.state.formData;
+    const { career, city, province, country, experience, position } = this.state.formData;
 
-    if (!!career && !!city && !!position) {
-      let url = this.getUrl(career, city, province, experience, position);
+    if (!!career) {
+      let url = this.getUrl(career, city, province, country, experience, position);
       console.log('Fetching from url', url);
       
       let response = await fetch(url).catch(() => {
@@ -73,13 +73,14 @@ export default class App extends Component {
 
   }
 
-  updateSearchForm = async (career, city, province, experience, position) => {
-    console.log(career, city, province, experience, position);
+  updateSearchForm = async (career, city, province, country, experience, position) => {
+    console.log(career, city, province, country, experience, position);
     this.setState({
       formData: {
         career,
         city,
         province,
+        country,
         experience,
         position
       }
@@ -87,15 +88,16 @@ export default class App extends Component {
   };
 
   // Example URL: 
-  // 'https://api.davidliao.ca/getJobStats?/stats?career=Software&city=San%20Francisco&province=CA&
+  // 'https://api.davidliao.ca/getJobStats?/stats?career=Software&city=San%20Francisco&province=CA&country=US
   //    experience=junior&position=fulltime';
-  getUrl = (career, city, province, experience, position) => {
+  getUrl = (career, city, province, country, experience, position) => {
     let url = (process.env.NODE_ENV === 'development') ?
       BASE_URL_DEV : BASE_URL_PROD;
 
     url += 'career=' + career
     url += '&city=' + city
     url += '&province=' + province
+    url += '&country=' + country
     url += '&experience=' + experience
     url += '&position=' + position
     return url;
@@ -109,28 +111,21 @@ export default class App extends Component {
           <Icon name="suitcase" circular />
           <Header.Content>CareerCounsel</Header.Content>
         </Header>
-        {/* <p>{this.state.data}</p> */}
+
         <p align="center">
           Are you looking a job? Unsure what skill are required? Contemplating a
           new degree? We've got all the info you need.
         </p>
+
         <CareerSearch callback={this.updateSearchForm} />
         <CareerResult
-          total={console.log('state', this.state.stats) || (!!this.state.stats ? this.state.stats.total : 0)}
-          degrees={
-            !!this.state.stats
-              ? Object.values(this.state.stats.degrees)
-              : []
-          }
-          specializations={
-            !!this.state.stats ? this.state.stats.specializations : []
-          }
+          total={!!this.state.stats ? this.state.stats.total : 0}
+          degrees={!!this.state.stats ? Object.values(this.state.stats.degrees) : []}
+          specializations={!!this.state.stats ? this.state.stats.specializations : []}
           title={this.state.formData.career}
           status={this.state.status}
           errorMessage={this.state.errorMessage}
         />
-
-        {/* Pass in processed data */}
 
         <p align="center">Copyright © 2019 David Liao, Andy Ren</p>
       </div>

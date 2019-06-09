@@ -18,7 +18,7 @@ export default class CareerResult extends Component {
         {header}
         <Segment placeholder>
           <Dimmer active>
-            <Loader>Loading</Loader>
+            <Loader>Loading...<br />This may take a while</Loader>
           </Dimmer>
         </Segment>
       </>

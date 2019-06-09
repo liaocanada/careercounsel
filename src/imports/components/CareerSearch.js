@@ -2,40 +2,40 @@ import React, { Component } from "react";
 import { Input, Form, Dropdown } from "semantic-ui-react";
 import { LEVEL_OPTIONS } from "../resources/dropdowns/LevelOptions";
 import { TERM_OPTIONS } from "../resources/dropdowns/TermOptions";
+import { COUNTRY_OPTIONS } from "../resources/dropdowns/CountryOptions";
 
 export default class CareerSearch extends Component {
     constructor(props) {
-
         super(props);
         this.state = ({
             careerInput: "",
             cityInput: "",
             provinceInput: "",
-            experienceInput: "",
-            positionInput: ""
+            countryInput: "",
+            experienceInput: "all",
+            positionInput: "all"
         });
-
     }
 
     render() {
         return (
             <Form>
-                <Form.Field>
+                <Form.Field required>
+                    <label>Keywords</label>
                     <Input
                         focus
                         fluid
-                        placeholder="Search for a career..."
+                        placeholder="Search for a career... E.g. Database Analyst"
                         value={this.state.careerInput}
                         onChange={(_, event) => {
                             this.setState({ careerInput: event.value });
-                            // console.log(event);
                         }}
                     />
                 </Form.Field>
 
                 <Form.Group>
 
-                    <Form.Field width={13}>
+                    <Form.Field width={8}>
                         <label>City</label>
                         <Input
                             placeholder='City'
@@ -45,15 +45,27 @@ export default class CareerSearch extends Component {
                             }}
                         />
                     </Form.Field>
-                    <Form.Field width={3}>
+                    <Form.Field width={4}>
                         <label>Province</label>
                         <Input
-                            // placeholder='Province/State'
-                            placeholder='DO NOT ENTER -- WIP'
+                            placeholder='Province/State'
                             value={this.state.provinceInput}
                             onChange={(_, event) => {
                                 this.setState({ provinceInput: event.value });
                             }}
+                        />
+                    </Form.Field>
+                    <Form.Field width={4} required>
+                        <label>Country</label>
+                        <Dropdown
+                            placeholder="Select a Country"
+                            fluid
+                            selection
+                            options={COUNTRY_OPTIONS}
+                            value={this.state.countryInput}
+                            onChange={(_, event) => {
+                                this.setState({ countryInput: event.value });
+                            }} 
                         />
                     </Form.Field>
                 </Form.Group>
@@ -64,7 +76,6 @@ export default class CareerSearch extends Component {
                         <Dropdown
                             placeholder="Select Level"
                             fluid
-                            search
                             selection
                             options={LEVEL_OPTIONS}
                             value={this.state.experienceInput}
@@ -79,8 +90,8 @@ export default class CareerSearch extends Component {
                         <Dropdown
                             placeholder="Select Position Type"
                             fluid
-                            search
                             selection
+                            search
                             options={TERM_OPTIONS}
                             value={this.state.positionInput}
                             onChange={(_, event) => {
@@ -90,15 +101,18 @@ export default class CareerSearch extends Component {
                     </Form.Field>
                 </Form.Group>
 
-                <Form.Button onClick={(_, event) => this.handleClick(event)}>Submit!</Form.Button>
+                <Form.Button onClick={(_, event) => this.submitForm(event)}>Submit!</Form.Button>
             </Form>
         );
     }
 
-    handleClick(event) {
-        console.log("Submit clicked!");
-        console.log(this.props);
-        const { careerInput, cityInput, provinceInput, experienceInput, positionInput } = this.state;
-        this.props.callback(careerInput, cityInput, provinceInput, experienceInput, positionInput);
+    submitForm() {
+        console.log("Submit clicked!", this.state);
+        var { careerInput, cityInput, provinceInput, countryInput, experienceInput, positionInput } = this.state;
+
+        // If user selected 'all', leave it blank
+        if (experienceInput === 'all') experienceInput = '';
+        if (positionInput === 'all') positionInput = '';
+        this.props.callback(careerInput, cityInput, provinceInput, countryInput, experienceInput, positionInput);
     }
 }

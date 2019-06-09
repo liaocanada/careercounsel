@@ -1,6 +1,7 @@
 // Values match queryOptions on https://www.npmjs.com/package/indeed-scraper
 
 export const TERM_OPTIONS = [
+    { key: "all", value:"all", text: "All Term Lengths"},
     { key: "temp", value:"temporary", text: "Temporary"},
     { key: "part", value:"parttime", text: "Part-time"},
     { key: "full", value: "fulltime", text: "Full-time"},
