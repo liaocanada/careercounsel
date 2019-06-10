@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Header, Icon, Message } from "semantic-ui-react";
+import { Header, Icon } from "semantic-ui-react";
 import CareerSearch from "./CareerSearch";
 import CareerResult from "./CareerResult";
 
@@ -21,8 +21,7 @@ export default class App extends Component {
         specializations: ""
       },
       status: 'no-input',  // no-input, loading, done, error
-      errorMessage: '',  // explanation for error
-      isAlertVisible: true
+      errorMessage: ''     // explanation for error
     };
   }
 
@@ -89,7 +88,7 @@ export default class App extends Component {
   };
 
   // Example URL: 
-  // 'https://api.davidliao.ca/getJobStats?/stats?career=Software&city=San%20Francisco&province=CA&country=US
+  // 'https://api.davidliao.ca/getJobStats?career=Software&city=San%20Francisco&province=CA&country=US
   //    experience=junior&position=fulltime';
   getUrl = (career, city, province, country, experience, position) => {
     let url = (process.env.NODE_ENV === 'development') ?
@@ -106,19 +105,6 @@ export default class App extends Component {
 
   render() {
     console.log("App started in", process.env.NODE_ENV, "environment");
-    let message = (
-      <Message warning onDismiss={() => {this.setState({isAlertVisible: false})}}>
-      <Message.Header>API Timeout</Message.Header>
-      <p>
-        The current time limit for loading stats is 30 seconds. If your search 
-        criteria take over 30 seconds to load, it will display "Fetch failed". 
-        Please adjust your search criteria accordingly. 
-      </p>
-      <p>
-        We are working to fix this ASAP.
-      </p>
-    </Message>
-    )
 
     return (
       <div className="App">
@@ -131,8 +117,6 @@ export default class App extends Component {
           Are you looking a job? Unsure what skill are required? Contemplating a
           new degree? We've got all the info you need.
         </p>
-
-      {this.state.isAlertVisible && message  /* Display message if state is visible */}
 
         <CareerSearch callback={this.updateSearchForm} />
         <CareerResult
