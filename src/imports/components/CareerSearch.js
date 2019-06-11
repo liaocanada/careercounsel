@@ -25,7 +25,7 @@ export default class CareerSearch extends Component {
                     <Input
                         focus
                         fluid
-                        placeholder="Search for a career... E.g. Database Analyst"
+                        placeholder="Search for an career field, job title, or company!"
                         value={this.state.careerInput}
                         onChange={(_, event) => {
                             this.setState({ careerInput: event.value });
@@ -101,7 +101,15 @@ export default class CareerSearch extends Component {
                     </Form.Field>
                 </Form.Group>
 
-                <Form.Button onClick={(_, event) => this.submitForm(event)}>Submit!</Form.Button>
+                <Form.Button 
+                    onClick={this.props.isLoading ? 
+                        null :
+                        ((_, event) => this.submitForm(event))
+                    }
+                    loading={this.props.isLoading}
+                >
+                    Submit!
+                </Form.Button>
             </Form>
         );
     }

@@ -32,7 +32,7 @@ export default class CareerResult extends Component {
         <p>
           Summary results from {total} {title} jobs:
         </p>
-        <Segment placeholder>
+        <Segment color='green'>
           <Header>What level of degree do I need?</Header>
           <strong>At least:</strong>
           <p>
@@ -62,7 +62,7 @@ export default class CareerResult extends Component {
     else if (status === 'done' && total === 0) return (
       <>
         {header}
-        <Segment placeholder>
+        <Segment placeholder color='yellow'>
           No results found...
         </Segment>
       </>
@@ -76,7 +76,7 @@ export default class CareerResult extends Component {
           <Header icon>
             <Icon name="cloud" />
             Stats will appear here when you search something!
-                </Header>
+          </Header>
         </Segment>
       </>
     );
@@ -85,8 +85,11 @@ export default class CareerResult extends Component {
     else if (status === 'error') return (
       <>
         {header}
-        <Segment placeholder>
-          {errorMessage}
+        <Segment placeholder color='red'>
+          <Header textAlign='center'>
+            Uh oh...
+            <Header.Subheader>{errorMessage}</Header.Subheader>
+          </Header>
         </Segment>
       </>
     );

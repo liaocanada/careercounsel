@@ -28,15 +28,15 @@ export default class App extends Component {
 
   /** Generates results based on this.state.formData */
   generateResults = async () => {
-    
-    this.setState({status: 'loading'});
+
+    this.setState({ status: 'loading' });
     console.log('Loading begin')
     const { career, city, province, country, experience, position } = this.state.formData;
 
-    if (!!career) {
+    if (!!career && !!country) {
       let url = this.getUrl(career, city, province, country, experience, position);
       console.log('Fetching from url', url);
-      
+
       let response = await fetch(url).catch(() => {
         console.error('error');
         this.setState({
@@ -50,25 +50,27 @@ export default class App extends Component {
         });
       });
       if (!response) return;
-      
+
       let stats = await response.json();
 
       this.setState({
-        stats: stats, 
+        stats: stats,
         status: 'done'
       });
 
       console.log('Done!')
 
     } else {
+      let incomplete = !career ? 'career' : 'country';
+
       this.setState({
         stats: {
-            total: 0,
-            degrees: "",
-            specializations: ""
+          total: 0,
+          degrees: "",
+          specializations: ""
         },
-        status: 'error', 
-        errorMessage: 'Mandatory fields incomplete'
+        status: 'error',
+        errorMessage: 'Mandatory ' + incomplete + ' field is incomplete'
       });
     }
 
@@ -115,11 +117,11 @@ export default class App extends Component {
         </Header>
 
         <p align="center">
-          Are you looking a job? Unsure what skill are required? Contemplating a
+          Are you looking a job? Unsure what skills are required? Contemplating a
           new degree? We've got all the info you need.
         </p>
 
-        <CareerSearch callback={this.updateSearchForm} />
+        <CareerSearch callback={this.updateSearchForm} isLoading={this.state.status === 'loading'} />
         <CareerResult
           total={!!this.state.stats ? this.state.stats.total : 0}
           degrees={!!this.state.stats ? Object.values(this.state.stats.degrees) : []}
