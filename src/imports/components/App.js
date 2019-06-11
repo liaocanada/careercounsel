@@ -7,7 +7,7 @@ import "./App.css";
 
 const BASE_URL_DEV = 'http://127.0.0.1:5000/stats?';  // If the Express server is running
 // const BASE_URL_PROD = 'https://api.davidliao.ca/getJobStats?';  // For serverless on AWS Lambda
-const BASE_URL_PROD = 'http://api.davidliao.ca/stats?';
+const BASE_URL_PROD = 'https://api.davidliao.ca/stats?';
 
 export default class App extends Component {
 
