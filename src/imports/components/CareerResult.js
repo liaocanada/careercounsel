@@ -90,6 +90,8 @@ export default class CareerResult extends Component {
             Uh oh...
             <Header.Subheader>{errorMessage}</Header.Subheader>
           </Header>
+          Note: I've shut down the backend server to save on costs. If you want to try this out, send me an email
+          at cc@davidliao.ca and I'll happily boot it up again.
         </Segment>
       </>
     );
