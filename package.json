@@ -3,10 +3,10 @@
   "version": "1.0.1",
   "private": true,
   "dependencies": {
-    "indeed-scraper": "^3.0.1",
+    "indeed-scraper": "^3.1.2",
     "node-fetch": "^2.6.1",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "react-scripts": "^2.1.8",
     "react-semantic-ui": "^0.2.0",
     "semantic-ui-css": "^2.4.1",
