@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "indeed-scraper": "^3.1.2",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-scripts": "^4.0.3",
